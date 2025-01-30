@@ -3,7 +3,7 @@ import clsx from 'clsx';
 import React, { useEffect, useMemo } from 'react';
 import './App.css';
 import Done from './components/Done';
-import Welcome from './components/Welcome';
+import Merge from './components/Merge';
 import useOidcMfa from './hooks/useOidcMfa';
 
 const projectRegex = /^P([a-zA-Z0-9]{27}|[a-zA-Z0-9]{31})$/;
@@ -44,6 +44,8 @@ const App = () => {
 	if (process.env.REACT_APP_USE_ORIGIN_BASE_URL)
 		baseUrl = window.location.origin;
 
+	baseUrl = 'https://api.descope.com';
+
 	let projectId = '';
 
 	// first, take project id from env
@@ -55,7 +57,8 @@ const App = () => {
 	const pathnameProjectId = projectRegex.exec(
 		window.location.pathname?.split('/').at(-1) || ''
 	)?.[0];
-	projectId = pathnameProjectId ?? envProjectId ?? '';
+	projectId =
+		pathnameProjectId ?? envProjectId ?? 'P2pgKajh2ElmCO6p7ioSPSpS6qev';
 
 	useOidcMfa();
 
@@ -64,9 +67,12 @@ const App = () => {
 		[]
 	);
 
-	const baseFunctionsUrl = process.env.REACT_APP_BASE_FUNCTIONS_URL || '';
+	const baseFunctionsUrl =
+		process.env.REACT_APP_BASE_FUNCTIONS_URL || 'https://api.descope.com/login';
 
-	const faviconUrl = process.env.REACT_APP_FAVICON_URL || '';
+	const faviconUrl =
+		process.env.REACT_APP_FAVICON_URL ||
+		'https://framerusercontent.com/images/5gIClGDpaFg8xOrCxMKYESchtVk.svg';
 
 	let ssoAppId = urlParams.get('sso_app_id') || '';
 	ssoAppId = ssoAppRegex.exec(ssoAppId)?.[0] || '';
@@ -105,13 +111,16 @@ const App = () => {
 	const styleId = urlParams.get('style') || process.env.DESCOPE_STYLE_ID;
 
 	const flowId =
-		urlParams.get('flow') || process.env.DESCOPE_FLOW_ID || 'sign-up-or-in';
+		urlParams.get('flow') ||
+		process.env.DESCOPE_FLOW_ID ||
+		'sign-up-or-in-passwords-social';
 
 	const debug =
 		urlParams.get('debug') === 'true' ||
 		process.env.DESCOPE_FLOW_DEBUG === 'true';
 
 	const done = urlParams.get('done') || false;
+	const merge = urlParams.get('merge') || false;
 
 	const locale = urlParams.get('locale') || process.env.DESCOPE_LOCALE;
 
@@ -144,33 +153,69 @@ const App = () => {
 		tenant: tenantId,
 		theme,
 		styleId,
-		...((flowId === 'saml-config' || flowId === 'sso-config') && {
+		...{
 			autoFocus: false,
-			onSuccess: () => {
+			onSuccess: (out: any) => {
+				// console.log(out);
 				let search = window?.location.search;
 				if (search) {
-					search = `${search}&done=true`;
+					search = `${search}&done=true&user_id=${out.detail.user.userId}`;
 				} else {
-					search = `?done=true`;
+					search = `?done=true&user_id=${out.detail.user.userId}`;
 				}
+
+				// console.log(out.detail)
+
+				// POST User to internal service
+				fetch(`http://localhost:3001/user`, {
+					mode: 'no-cors',
+					headers: {
+						Accept: 'application/json',
+						'Content-Type': 'application/json'
+					},
+					method: 'POST',
+					body: JSON.stringify(out.detail)
+				})
+					.then(() => {
+						// console.log(res)
+					})
+					.catch(() => {
+						// console.log(res)
+					});
+
 				// build the new URL
 				const newUrl = new URL(window?.location.origin);
 				newUrl.pathname = window?.location.pathname;
 				newUrl.search = search;
 				window?.location.assign(newUrl.toString());
 			}
-		})
+		}
 	};
+
+	// If we are done, then make a call to POS to load the user
+	if (done) {
+		const port = urlParams.get('port') || '';
+		const userId = urlParams.get('user_id') || '';
+		fetch(`http://localhost:${port}/user/${userId}`, {
+			mode: 'no-cors'
+		})
+			.then(() => {
+				// console.log(resp)
+			})
+			.catch(() => {
+				// console.log(err)
+			});
+	}
 
 	return (
 		<AuthProvider projectId={projectId} baseUrl={baseUrl}>
 			<div className="app" style={{ backgroundColor }}>
-				{!done && projectId && flowId && (
+				{!done && !merge && projectId && flowId && (
 					<div className={containerClasses} data-testid="descope-component">
 						<Descope {...flowProps} />
 					</div>
 				)}
-				{!done && (!projectId || !flowId) && <Welcome />}
+				{!done && merge && <Merge />}
 				{done && <Done />}
 			</div>
 		</AuthProvider>
