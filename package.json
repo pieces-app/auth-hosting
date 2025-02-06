@@ -103,7 +103,7 @@
 	"engines": {
 		"yarn": ">=1.22.0"
 	},
-	"homepage": "login",
+	"homepage": "",
 	"jest": {
 		"collectCoverageFrom": [
 			"src/**/*.{js,jsx,ts,tsx}",

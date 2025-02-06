@@ -30,7 +30,7 @@ const Merge = () => {
 			<p className="text-body">
 				Click the Button below to send the confirmation emails.
 			</p>
-			<Button size="large" variant="outlined" endIcon={<SendIcon />}>
+			<Button size="large" variant="contained" endIcon={<SendIcon />}>
 				Merge Accounts
 			</Button>
 		</div>
