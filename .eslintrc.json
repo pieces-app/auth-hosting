@@ -54,7 +54,7 @@
 		],
 		"security/detect-object-injection": "off",
 		"@typescript-eslint/indent": "off",
-		"react/jsx-indent": [2, "tab"],
+		// "react/jsx-indent": [2, "tab"],
 		"react/jsx-props-no-spreading": "off",
 		"react-hooks/rules-of-hooks": "warn",
 		"react-hooks/exhaustive-deps": "error",

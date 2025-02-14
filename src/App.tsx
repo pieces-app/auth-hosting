@@ -4,6 +4,7 @@ import React, { useEffect, useMemo } from 'react';
 import './App.css';
 import Done from './components/Done';
 import Merge from './components/Merge';
+import Confirm from './components/Confirm';
 import useOidcMfa from './hooks/useOidcMfa';
 
 const projectRegex = /^P([a-zA-Z0-9]{27}|[a-zA-Z0-9]{31})$/;
@@ -121,6 +122,7 @@ const App = () => {
 
 	const done = urlParams.get('done') || false;
 	const merge = urlParams.get('merge') || false;
+	const confirm = urlParams.get('confirm') || false;
 
 	const locale = urlParams.get('locale') || process.env.DESCOPE_LOCALE;
 
@@ -210,12 +212,13 @@ const App = () => {
 	return (
 		<AuthProvider projectId={projectId} baseUrl={baseUrl}>
 			<div className="app" style={{ backgroundColor }}>
-				{!done && !merge && projectId && flowId && (
+				{!done && !merge && !confirm && projectId && flowId && (
 					<div className={containerClasses} data-testid="descope-component">
 						<Descope {...flowProps} />
 					</div>
 				)}
-				{!done && merge && <Merge />}
+				{!done && merge && !confirm && <Merge />}
+				{!done && !merge && confirm && <Confirm />}
 				{done && <Done />}
 			</div>
 		</AuthProvider>

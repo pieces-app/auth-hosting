@@ -1,5 +1,5 @@
 import '../App.css';
-import React, { useMemo } from 'react';
+import React, { useMemo, useState } from 'react';
 import { Button } from '@mui/material';
 import SendIcon from '@mui/icons-material/Send';
 
@@ -9,8 +9,32 @@ const Merge = () => {
 		[]
 	);
 
+	const [disable, setDisabled] = useState(false);
+
 	const to = urlParams.get('to') || '';
 	const from = urlParams.get('from') || '';
+
+	const clickHandler = () => {
+		fetch(`http://localhost:3001/user/merge`, {
+			mode: 'no-cors',
+			headers: {
+				Accept: 'application/json',
+				'Content-Type': 'application/json'
+			},
+			method: 'POST',
+			body: JSON.stringify({
+				to_account: to,
+				from_account: from
+			})
+		})
+			.then(() => {
+				// console.log(res)
+				setDisabled(true);
+			})
+			.catch(() => {
+				// console.log(res)
+			});
+	};
 
 	return (
 		<div className="app-content" data-testid="welcome-component">
@@ -27,12 +51,27 @@ const Merge = () => {
 			<p className="example-title">Email #1: {to}</p>
 			<p className="example-title">Email #2: {from}</p>
 			<p className="example-title">&nbsp;</p>
-			<p className="text-body">
-				Click the Button below to send the confirmation emails.
-			</p>
-			<Button size="large" variant="contained" endIcon={<SendIcon />}>
-				Merge Accounts
-			</Button>
+			{!disable && (
+				<div>
+					<p className="text-body">
+						Click the Button below to send the confirmation emails.
+					</p>
+					<Button
+						size="large"
+						variant="contained"
+						endIcon={<SendIcon />}
+						onClick={clickHandler}
+						disabled={disable}
+					>
+						Merge Accounts
+					</Button>
+				</div>
+			)}
+			{disable && (
+				<p className="example-title">
+					Please check you email accounts for the confirmation emails.
+				</p>
+			)}
 		</div>
 	);
 };
