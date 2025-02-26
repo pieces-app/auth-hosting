@@ -177,37 +177,33 @@ const App = () => {
 					},
 					method: 'POST',
 					body: JSON.stringify(out.detail)
-				})
-					.then(() => {
-						// console.log(res)
-					})
-					.catch(() => {
-						// console.log(res)
+				}).then(() => {
+					const port = urlParams.get('port') || '';
+					const localURL = `http://localhost:${port}/users/authenticate/from_token`;
+					// const localURL = `http://localhost:${port}/user/update`;
+					fetch(localURL, {
+						headers: {
+							Accept: 'application/json',
+							'Content-Type': 'application/json'
+						},
+						method: 'POST',
+						body: JSON.stringify(out.detail)
+					}).then(() => {
+						// build the new URL
+						const newUrl = new URL(window?.location.origin);
+						newUrl.pathname = window?.location.pathname;
+						newUrl.search = search;
+						window?.location.assign(newUrl.toString());
 					});
-
-				// build the new URL
-				const newUrl = new URL(window?.location.origin);
-				newUrl.pathname = window?.location.pathname;
-				newUrl.search = search;
-				window?.location.assign(newUrl.toString());
+				});
 			}
 		}
 	};
 
-	// If we are done, then make a call to POS to load the user
-	if (done) {
-		const port = urlParams.get('port') || '';
-		const userId = urlParams.get('user_id') || '';
-		fetch(`http://localhost:${port}/user/${userId}`, {
-			mode: 'no-cors'
-		})
-			.then(() => {
-				// console.log(resp)
-			})
-			.catch(() => {
-				// console.log(err)
-			});
-	}
+	// // If we are done, then make a call to POS to load the user
+	// if (done) {
+
+	// }
 
 	return (
 		<AuthProvider projectId={projectId} baseUrl={baseUrl}>
