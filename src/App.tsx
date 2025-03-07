@@ -169,7 +169,7 @@ const App = () => {
 				// console.log(out.detail)
 
 				// POST User to internal service
-				fetch(`http://localhost:3001/user`, {
+				fetch(`http://localhost:${port}/user`, {
 					mode: 'no-cors',
 					headers: {
 						Accept: 'application/json',
@@ -178,32 +178,14 @@ const App = () => {
 					method: 'POST',
 					body: JSON.stringify(out.detail)
 				}).then(() => {
-					const port = urlParams.get('port') || '';
-					const localURL = `http://localhost:${port}/users/authenticate/from_token`;
-					// const localURL = `http://localhost:${port}/user/update`;
-					fetch(localURL, {
-						headers: {
-							Accept: 'application/json',
-							'Content-Type': 'application/json'
-						},
-						method: 'POST',
-						body: JSON.stringify(out.detail)
-					}).then(() => {
-						// build the new URL
-						const newUrl = new URL(window?.location.origin);
-						newUrl.pathname = window?.location.pathname;
-						newUrl.search = search;
-						window?.location.assign(newUrl.toString());
-					});
+					const newUrl = new URL(window?.location.origin);
+					newUrl.pathname = window?.location.pathname;
+					newUrl.search = search;
+					window?.location.assign(newUrl.toString());
 				});
 			}
 		}
 	};
-
-	// // If we are done, then make a call to POS to load the user
-	// if (done) {
-
-	// }
 
 	return (
 		<AuthProvider projectId={projectId} baseUrl={baseUrl}>

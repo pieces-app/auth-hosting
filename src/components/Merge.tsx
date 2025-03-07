@@ -48,8 +48,8 @@ const Merge = () => {
 				Both need emails require a link to be clicked in order to successfully
 				merge the accounts.
 			</p>
-			<p className="example-title">Email #1: {to}</p>
-			<p className="example-title">Email #2: {from}</p>
+			<p className="example-title">From Email: {from}</p>
+			<p className="example-title">To Email: {to}</p>
 			<p className="example-title">&nbsp;</p>
 			{!disable && (
 				<div>
