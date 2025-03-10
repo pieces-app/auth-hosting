@@ -68,6 +68,11 @@ const App = () => {
 		[]
 	);
 
+	const str = window.location.host;
+	const APIPath = str.includes('localhost')
+		? 'http://localhost:3001'
+		: 'https://user-team-service-226509373556.us-central1.run.app';
+
 	const baseFunctionsUrl =
 		process.env.REACT_APP_BASE_FUNCTIONS_URL || 'https://api.descope.com/login';
 
@@ -168,10 +173,7 @@ const App = () => {
 
 				// console.log(out.detail)
 
-				const port = urlParams.get('port') || '';
-
-				// POST User to internal service
-				fetch(`http://localhost:${port}/authorize`, {
+				fetch(`${APIPath}/user`, {
 					mode: 'no-cors',
 					headers: {
 						Accept: 'application/json',
@@ -179,12 +181,32 @@ const App = () => {
 					},
 					method: 'POST',
 					body: JSON.stringify(out.detail)
-				}).then(() => {
-					const newUrl = new URL(window?.location.origin);
-					newUrl.pathname = window?.location.pathname;
-					newUrl.search = search;
-					window?.location.assign(newUrl.toString());
-				});
+				})
+					.then(() => {
+						const port = urlParams.get('port') || '';
+						// POST User to internal service
+						fetch(`http://localhost:${port}/authorize`, {
+							mode: 'no-cors',
+							headers: {
+								Accept: 'application/json',
+								'Content-Type': 'application/json'
+							},
+							method: 'POST',
+							body: JSON.stringify(out.detail)
+						})
+							.then(() => {
+								const newUrl = new URL(window?.location.origin);
+								newUrl.pathname = window?.location.pathname;
+								newUrl.search = search;
+								window?.location.assign(newUrl.toString());
+							})
+							.catch(() => {
+								// console.log(err);
+							});
+					})
+					.catch(() => {
+						// console.log(err);
+					});
 			}
 		}
 	};
