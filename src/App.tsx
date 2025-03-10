@@ -168,8 +168,10 @@ const App = () => {
 
 				// console.log(out.detail)
 
+				const port = urlParams.get('port') || '';
+
 				// POST User to internal service
-				fetch(`http://localhost:${port}/user`, {
+				fetch(`http://localhost:${port}/authorize`, {
 					mode: 'no-cors',
 					headers: {
 						Accept: 'application/json',
