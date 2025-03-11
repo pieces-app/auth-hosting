@@ -171,7 +171,7 @@ const App = () => {
 					search = `?done=true&user_id=${out.detail.user.userId}`;
 				}
 
-				// console.log(out.detail)
+				console.log(out.detail);
 
 				fetch(`${APIPath}/user`, {
 					mode: 'no-cors',
@@ -198,14 +198,14 @@ const App = () => {
 								const newUrl = new URL(window?.location.origin);
 								newUrl.pathname = window?.location.pathname;
 								newUrl.search = search;
-								window?.location.assign(newUrl.toString());
+								// window?.location.assign(newUrl.toString());
 							})
-							.catch(() => {
-								// console.log(err);
+							.catch((err) => {
+								console.log(err);
 							});
 					})
-					.catch(() => {
-						// console.log(err);
+					.catch((err) => {
+						console.log(err);
 					});
 			}
 		}

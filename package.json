@@ -8,6 +8,7 @@
 		"@emotion/styled": "11.14.0",
 		"@mui/icons-material": "5.16.13",
 		"@mui/material": "5.16.13",
+		"axios": "^1.8.2",
 		"clsx": "2.1.0",
 		"dotenv": "^16.4.7",
 		"path-browserify": "^1.0.1",
@@ -19,7 +20,6 @@
 	},
 	"devDependencies": {
 		"@babel/core": "^7.0.0",
-		"babel-core": "7.0.0-bridge.0",
 		"@babel/plugin-proposal-private-property-in-object": "7.21.11",
 		"@babel/preset-env": "7.26.0",
 		"@babel/preset-react": "7.26.3",
@@ -32,6 +32,7 @@
 		"@types/react-dom": "18.3.5",
 		"@typescript-eslint/eslint-plugin": "6.18.1",
 		"@typescript-eslint/parser": "6.18.1",
+		"babel-core": "7.0.0-bridge.0",
 		"babel-plugin-transform-export-extensions": "6.22.0",
 		"eslint": "8.56.0",
 		"eslint-config-airbnb": "19.0.4",

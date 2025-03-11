@@ -91,7 +91,7 @@
 				"classPropertiesAllowed": false
 			}
 		],
-		// "no-console": 2,
+		"no-console": 0,
 		"no-only-tests/no-only-tests": 2,
 		"no-param-reassign": [
 			"error",
