@@ -183,26 +183,10 @@ const App = () => {
 					body: JSON.stringify(out.detail)
 				})
 					.then(() => {
-						const port = urlParams.get('port') || '';
-						// POST User to internal service
-						fetch(`http://localhost:${port}/authorize`, {
-							mode: 'no-cors',
-							headers: {
-								Accept: 'application/json',
-								'Content-Type': 'application/json'
-							},
-							method: 'POST',
-							body: JSON.stringify(out.detail)
-						})
-							.then(() => {
-								const newUrl = new URL(window?.location.origin);
-								newUrl.pathname = window?.location.pathname;
-								newUrl.search = search;
-								// window?.location.assign(newUrl.toString());
-							})
-							.catch((err) => {
-								console.log(err);
-							});
+						const newUrl = new URL(window?.location.origin);
+						newUrl.pathname = window?.location.pathname;
+						newUrl.search = search;
+						// window?.location.assign(newUrl.toString());
 					})
 					.catch((err) => {
 						console.log(err);
