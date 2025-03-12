@@ -172,6 +172,7 @@ const App = () => {
 				}
 
 				console.log(out.detail);
+
 				fetch(`${APIPath}/user`, {
 					mode: 'no-cors',
 					headers: {
