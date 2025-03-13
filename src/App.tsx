@@ -185,7 +185,7 @@ const App = () => {
 						const newUrl = new URL(window?.location.origin);
 						newUrl.pathname = window?.location.pathname;
 						newUrl.search = search;
-						// window?.location.assign(newUrl.toString());
+						window?.location.assign(newUrl.toString());
 					})
 					.catch((err) => {
 						console.log(err);
