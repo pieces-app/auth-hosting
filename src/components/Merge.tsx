@@ -14,8 +14,13 @@ const Merge = () => {
 	const to = urlParams.get('to') || '';
 	const from = urlParams.get('from') || '';
 
+	const str = window.location.host;
+	const APIPath = str.includes('localhost')
+		? 'http://localhost:3001'
+		: 'https://user-team-service-226509373556.us-central1.run.app';
+
 	const clickHandler = () => {
-		fetch(`http://localhost:3001/user/merge`, {
+		fetch(`${APIPath}/user/merge`, {
 			mode: 'no-cors',
 			headers: {
 				Accept: 'application/json',

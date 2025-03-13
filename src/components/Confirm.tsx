@@ -13,12 +13,17 @@ const Confirm = () => {
 	);
 	const [disable, setDisabled] = useState(false);
 
+	const str = window.location.host;
+	const APIPath = str.includes('localhost')
+		? 'http://localhost:3001'
+		: 'https://user-team-service-226509373556.us-central1.run.app';
+
 	const id = urlParams.get('id') || '';
 	const direction = urlParams.get('direction') || '';
 	const wayId = urlParams.get('way_id') || '';
 
 	const clickHandler = () => {
-		fetch(`http://localhost:3001/user/confirm`, {
+		fetch(`${APIPath}/user/confirm`, {
 			mode: 'no-cors',
 			headers: {
 				Accept: 'application/json',
