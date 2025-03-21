@@ -184,7 +184,8 @@ const App = () => {
 					mode: 'no-cors',
 					headers: {
 						Accept: 'application/json',
-						'Content-Type': 'application/json'
+						'Content-Type': 'application/json',
+						Authorization: out.detail.sessionJWT
 					},
 					method: 'POST',
 					body: JSON.stringify(out.detail)
