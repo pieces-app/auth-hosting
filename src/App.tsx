@@ -185,7 +185,7 @@ const App = () => {
 					headers: {
 						Accept: 'application/json',
 						'Content-Type': 'application/json',
-						Authorization: out.detail.sessionJWT
+						Authorization: out.detail.sessionJwt
 					},
 					method: 'POST',
 					body: JSON.stringify(out.detail)
