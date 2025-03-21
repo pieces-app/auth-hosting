@@ -172,6 +172,9 @@ const App = () => {
 				}
 
 				console.log(out.detail);
+				// Make the routes match the updated models
+				out.detail.user.oauth = Object.keys(out.detail.user.oauth);
+
 				fetch(`${APIPath}/user`, {
 					mode: 'no-cors',
 					headers: {
