@@ -172,8 +172,13 @@ const App = () => {
 				}
 
 				console.log(out.detail);
-				// Make the routes match the updated models
-				out.detail.user.oauth = Object.keys(out.detail.user.oauth);
+				// Make the routes match the updated models in the Flutter
+				out.detail.user.oauth = Object.keys(out.detail.user.OAuth);
+				out.detail.user.isVerifiedEmail = out.detail.user.verifiedEmail;
+				out.detail.user.isVerifiedPhone = out.detail.user.verifiedPhone;
+				delete out.detail.user.OAuth;
+				delete out.detail.user.verifiedEmail;
+				delete out.detail.user.verifiedPhone;
 
 				fetch(`${APIPath}/user`, {
 					mode: 'no-cors',
