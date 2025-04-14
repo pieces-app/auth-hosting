@@ -24,6 +24,7 @@ const isFaviconUrlSecure = (url: string, originalFaviconUrl: string) => {
 };
 
 const getExistingFaviconUrl = async (baseUrl: string, url: string) => {
+	return 'https://framerusercontent.com/images/5gIClGDpaFg8xOrCxMKYESchtVk.svg';
 	try {
 		const response = await fetch(
 			`${baseUrl}/api/favicon?url=${encodeURIComponent(url)}`
@@ -68,16 +69,10 @@ const App = () => {
 		[]
 	);
 
-	const str = window.location.host;
-	const APIPath = str.includes('localhost')
-		? 'http://localhost:3001'
-		: 'https://user-team-service-226509373556.us-central1.run.app';
-
 	const baseFunctionsUrl =
 		process.env.REACT_APP_BASE_FUNCTIONS_URL || 'https://api.descope.com/login';
 
 	const faviconUrl =
-		process.env.REACT_APP_FAVICON_URL ||
 		'https://framerusercontent.com/images/5gIClGDpaFg8xOrCxMKYESchtVk.svg';
 
 	let ssoAppId = urlParams.get('sso_app_id') || '';
@@ -180,25 +175,10 @@ const App = () => {
 				delete out.detail.user.verifiedEmail;
 				delete out.detail.user.verifiedPhone;
 
-				fetch(`${APIPath}/user`, {
-					mode: 'no-cors',
-					headers: {
-						Accept: 'application/json',
-						'Content-Type': 'application/json',
-						Authorization: out.detail.sessionJwt
-					},
-					method: 'POST',
-					body: JSON.stringify(out.detail)
-				})
-					.then(() => {
-						const newUrl = new URL(window?.location.origin);
-						newUrl.pathname = window?.location.pathname;
-						newUrl.search = search;
-						window?.location.assign(newUrl.toString());
-					})
-					.catch((err) => {
-						console.log(err);
-					});
+				const newUrl = new URL(window?.location.origin);
+				newUrl.pathname = window?.location.pathname;
+				newUrl.search = search;
+				window?.location.assign(newUrl.toString());
 			}
 		}
 	};
