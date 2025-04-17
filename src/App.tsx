@@ -184,41 +184,18 @@ const App = () => {
 	};
 
 	return (
-		<div className="App">
-			<button
-				type="button"
-				onClick={() => {
-					throw new Error('Sentry Test Error');
-				}}
-				style={{
-					position: 'fixed',
-					top: '10px',
-					right: '10px',
-					zIndex: 9999,
-					padding: '8px 16px',
-					backgroundColor: '#ff4444',
-					color: 'white',
-					border: 'none',
-					borderRadius: '4px',
-					cursor: 'pointer'
-				}}
-			>
-				Test Sentry
-			</button>
-
-			<AuthProvider projectId={projectId} baseUrl={baseUrl}>
-				<div className="app" style={{ backgroundColor }}>
-					{!done && !merge && !confirm && projectId && flowId && (
-						<div className={containerClasses} data-testid="descope-component">
-							<Descope {...flowProps} />
-						</div>
-					)}
-					{!done && merge && !confirm && <Merge />}
-					{!done && !merge && confirm && <Confirm />}
-					{done && <Done />}
-				</div>
-			</AuthProvider>
-		</div>
+		<AuthProvider projectId={projectId} baseUrl={baseUrl}>
+			<div className="app" style={{ backgroundColor }}>
+				{!done && !merge && !confirm && projectId && flowId && (
+					<div className={containerClasses} data-testid="descope-component">
+						<Descope {...flowProps} />
+					</div>
+				)}
+				{!done && merge && !confirm && <Merge />}
+				{!done && !merge && confirm && <Confirm />}
+				{done && <Done />}
+			</div>
+		</AuthProvider>
 	);
 };
 
