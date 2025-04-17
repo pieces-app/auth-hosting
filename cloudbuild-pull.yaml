@@ -11,7 +11,7 @@ steps:
       - -c
       - |
         docker build --no-cache \
-          --build-arg SENTRY_AUTH_TOKEN=$SENTRY_AUTH_TOKEN \
+          --build-arg SENTRY_AUTH_TOKEN=$$SENTRY_AUTH_TOKEN \
           --build-arg COMMIT_SHA=$COMMIT_SHA \
           -t $_AR_HOSTNAME/$PROJECT_ID/cloud-run-source-deploy/$REPO_NAME/$_SERVICE_NAME:$COMMIT_SHA \
           . -f Dockerfile
