@@ -1,47 +1,48 @@
 steps:
   - id: Build
     name: gcr.io/cloud-builders/docker
-    # expose the secret to this step
+    # expose both the secret and the built-in COMMIT_SHA as environment vars
     env:
       - SENTRY_AUTH_TOKEN
+      - COMMIT_SHA
     args:
       - build
       - '--no-cache'
+      # pass the env vars into docker as build‑args (no =VALUE here)
       - '--build-arg'
-      - 'SENTRY_AUTH_TOKEN=$SENTRY_AUTH_TOKEN'
+      - SENTRY_AUTH_TOKEN
       - '--build-arg'
-      - 'COMMIT_SHA=$COMMIT_SHA'
+      - COMMIT_SHA
       - '-t'
       - '$_AR_HOSTNAME/$PROJECT_ID/cloud-run-source-deploy/$REPO_NAME/$_SERVICE_NAME:$COMMIT_SHA'
       - '.'
       - '-f'
       - 'Dockerfile'
 
-  - id: Push
-    name: gcr.io/cloud-builders/docker
-    args:
-      - push
-      - '$_AR_HOSTNAME/$PROJECT_ID/cloud-run-source-deploy/$REPO_NAME/$_SERVICE_NAME:$COMMIT_SHA'
-
-  - id: Deploy
-    name: 'gcr.io/google.com/cloudsdktool/cloud-sdk:slim'
-    entrypoint: gcloud
-    args:
-      - run
-      - services
-      - update
-      - '$_SERVICE_NAME'
-      - '--platform=managed'
-      - '--image=$_AR_HOSTNAME/$PROJECT_ID/cloud-run-source-deploy/$REPO_NAME/$_SERVICE_NAME:$COMMIT_SHA'
-      - '--labels=managed-by=gcp-cloud-build-deploy-cloud-run,commit-sha=$COMMIT_SHA,gcb-build-id=$BUILD_ID,gcb-trigger-id=$_TRIGGER_ID'
-      - '--region=$_DEPLOY_REGION'
-      - '--quiet'
+#  - id: Push
+#    name: gcr.io/cloud-builders/docker
+#    args:
+#      - push
+#      - '$_AR_HOSTNAME/$PROJECT_ID/cloud-run-source-deploy/$REPO_NAME/$_SERVICE_NAME:$COMMIT_SHA'
+#
+#  - id: Deploy
+#    name: 'gcr.io/google.com/cloudsdktool/cloud-sdk:slim'
+#    entrypoint: gcloud
+#    args:
+#      - run
+#      - services
+#      - update
+#      - '$_SERVICE_NAME'
+#      - '--platform=managed'
+#      - '--image=$_AR_HOSTNAME/$PROJECT_ID/cloud-run-source-deploy/$REPO_NAME/$_SERVICE_NAME:$COMMIT_SHA'
+#      - '--labels=managed-by=gcp-cloud-build-deploy-cloud-run,commit-sha=$COMMIT_SHA,gcb-build-id=$BUILD_ID,gcb-trigger-id=$_TRIGGER_ID'
+#      - '--region=$_DEPLOY_REGION'
+#      - '--quiet'
 
 images:
   - '$_AR_HOSTNAME/$PROJECT_ID/cloud-run-source-deploy/$REPO_NAME/$_SERVICE_NAME:$COMMIT_SHA'
 
 options:
-  # you already had substitutionOption and logging; we add defaultLogsBucketBehavior
   substitutionOption: ALLOW_LOOSE
   logging: CLOUD_LOGGING_ONLY
   defaultLogsBucketBehavior: REGIONAL_USER_OWNED_BUCKET
