@@ -41,8 +41,6 @@ images:
 
 options:
   substitutionOption: ALLOW_LOOSE
-  logging: CLOUD_LOGGING_ONLY
-  defaultLogsBucketBehavior: REGIONAL_USER_OWNED_BUCKET
 
 substitutions:
   _AR_HOSTNAME: us-central1-docker.pkg.dev
