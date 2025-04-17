@@ -1,32 +1,30 @@
 # — Build Stage — 
 FROM node:alpine3.20 AS build
 
-# 1) Declare the build‑args we’ll pass in (via Cloud Build).
 ARG SENTRY_AUTH_TOKEN
 ARG COMMIT_SHA
+ARG SENTRY_ORG
+ARG SENTRY_PROJECT
 
-# 2) Export them into the container’s ENV so sentry‑cli sees them.
 ENV SENTRY_AUTH_TOKEN=${SENTRY_AUTH_TOKEN}
 ENV COMMIT_SHA=${COMMIT_SHA}
-ENV SENTRY_ORG=pieces
-ENV SENTRY_PROJECT=auth-hosting
+ENV SENTRY_ORG=${SENTRY_ORG}
+ENV SENTRY_PROJECT=${SENTRY_PROJECT}
 
 WORKDIR /app
-
-# 3) Install deps and build your React app
 COPY ["package.json", "yarn.lock*", "./"]
 RUN yarn install
-
 COPY . .
 RUN yarn build
 
-# 4) Install sentry‑cli and create/finalize a release
-#    (replace `your-project-slug` with the slug from your Sentry org)
+# now invoke sentry-cli with the real slugs
 RUN yarn global add @sentry/cli \
- && sentry-cli releases new -p your-project-slug $COMMIT_SHA \
+ && sentry-cli releases new \
+      --org $SENTRY_ORG \
+      --project $SENTRY_PROJECT \
+      $COMMIT_SHA \
  && sentry-cli releases set-commits --auto $COMMIT_SHA \
  && sentry-cli releases finalize $COMMIT_SHA
-
 
 # — Production Stage — 
 FROM nginx:stable-alpine AS production
