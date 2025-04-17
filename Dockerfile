@@ -8,6 +8,8 @@ ARG COMMIT_SHA
 # 2) Export them into the container’s ENV so sentry‑cli sees them.
 ENV SENTRY_AUTH_TOKEN=${SENTRY_AUTH_TOKEN}
 ENV COMMIT_SHA=${COMMIT_SHA}
+ENV SENTRY_ORG=pieces
+ENV SENTRY_PROJECT=auth-hosting
 
 WORKDIR /app
 
