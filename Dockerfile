@@ -18,13 +18,13 @@ COPY . .
 RUN yarn build
 
 # now invoke sentry-cli with the real slugs
-RUN yarn global add @sentry/cli \
- && sentry-cli releases new \
-      --org $SENTRY_ORG \
-      --project $SENTRY_PROJECT \
-      $COMMIT_SHA \
- && sentry-cli releases set-commits --auto $COMMIT_SHA \
- && sentry-cli releases finalize $COMMIT_SHA
+#RUN yarn global add @sentry/cli \
+# && sentry-cli releases new \
+#      --org $SENTRY_ORG \
+#      --project $SENTRY_PROJECT \
+#      $COMMIT_SHA \
+# && sentry-cli releases set-commits --auto $COMMIT_SHA \
+# && sentry-cli releases finalize $COMMIT_SHA
 
 # — Production Stage — 
 FROM nginx:stable-alpine AS production
