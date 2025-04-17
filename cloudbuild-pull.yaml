@@ -41,6 +41,7 @@ images:
 
 options:
   substitutionOption: ALLOW_LOOSE
+  logging: CLOUD_LOGGING_ONLY
 
 substitutions:
   _AR_HOSTNAME: us-central1-docker.pkg.dev
