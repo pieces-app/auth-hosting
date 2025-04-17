@@ -1,45 +1,43 @@
 steps:
   - id: Build
     name: gcr.io/cloud-builders/docker
-    # now each env entry is KEY=VALUE
-    env:
-      - 'SENTRY_AUTH_TOKEN=$SENTRY_AUTH_TOKEN'
-      - 'COMMIT_SHA=$COMMIT_SHA'
-    args:
-      - build
-      - '--no-cache'
-      - '--build-arg'
+    # run under bash so we can refer to the secret env var
+    entrypoint: bash
+    # make the SENTRY_AUTH_TOKEN from Secret Manager available
+    secretEnv:
       - SENTRY_AUTH_TOKEN
-      - '--build-arg'
-      - COMMIT_SHA
-      - '-t'
-      - '$_AR_HOSTNAME/$PROJECT_ID/cloud-run-source-deploy/$REPO_NAME/$_SERVICE_NAME:$COMMIT_SHA'
-      - '.'
-      - '-f'
-      - 'Dockerfile'
+    args:
+      # -c means “the rest is a shell command”
+      - -c
+      - |
+        docker build --no-cache \
+          --build-arg SENTRY_AUTH_TOKEN=$$SENTRY_AUTH_TOKEN \
+          --build-arg COMMIT_SHA=$COMMIT_SHA \
+          -t $_AR_HOSTNAME/$PROJECT_ID/cloud-run-source-deploy/$REPO_NAME/$_SERVICE_NAME:$COMMIT_SHA \
+          . -f Dockerfile
 
-#  - id: Push
-#    name: gcr.io/cloud-builders/docker
-#    args:
-#      - push
-#      - '$_AR_HOSTNAME/$PROJECT_ID/cloud-run-source-deploy/$REPO_NAME/$_SERVICE_NAME:$COMMIT_SHA'
-#
-#  - id: Deploy
-#    name: 'gcr.io/google.com/cloudsdktool/cloud-sdk:slim'
-#    entrypoint: gcloud
-#    args:
-#      - run
-#      - services
-#      - update
-#      - '$_SERVICE_NAME'
-#      - '--platform=managed'
-#      - '--image=$_AR_HOSTNAME/$PROJECT_ID/cloud-run-source-deploy/$REPO_NAME/$_SERVICE_NAME:$COMMIT_SHA'
-#      - '--labels=managed-by=gcp-cloud-build-deploy-cloud-run,commit-sha=$COMMIT_SHA,gcb-build-id=$BUILD_ID,gcb-trigger-id=$_TRIGGER_ID'
-#      - '--region=$_DEPLOY_REGION'
-#      - '--quiet'
+  - id: Push
+    name: gcr.io/cloud-builders/docker
+    args:
+      - push
+      - $_AR_HOSTNAME/$PROJECT_ID/cloud-run-source-deploy/$REPO_NAME/$_SERVICE_NAME:$COMMIT_SHA
+
+  - id: Deploy
+    name: gcr.io/google.com/cloudsdktool/cloud-sdk:slim
+    entrypoint: gcloud
+    args:
+      - run
+      - services
+      - update
+      - $_SERVICE_NAME
+      - --platform=managed
+      - --image=$_AR_HOSTNAME/$PROJECT_ID/cloud-run-source-deploy/$REPO_NAME/$_SERVICE_NAME:$COMMIT_SHA
+      - --labels=managed-by=gcp-cloud-build-deploy-cloud-run,commit-sha=$COMMIT_SHA,gcb-build-id=$BUILD_ID,gcb-trigger-id=$_TRIGGER_ID
+      - --region=$_DEPLOY_REGION
+      - --quiet
 
 images:
-  - '$_AR_HOSTNAME/$PROJECT_ID/cloud-run-source-deploy/$REPO_NAME/$_SERVICE_NAME:$COMMIT_SHA'
+  - $_AR_HOSTNAME/$PROJECT_ID/cloud-run-source-deploy/$REPO_NAME/$_SERVICE_NAME:$COMMIT_SHA
 
 options:
   substitutionOption: ALLOW_LOOSE
