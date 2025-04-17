@@ -1,14 +1,13 @@
 steps:
   - id: Build
     name: gcr.io/cloud-builders/docker
-    # expose both the secret and the built-in COMMIT_SHA as environment vars
+    # now each env entry is KEY=VALUE
     env:
-      - SENTRY_AUTH_TOKEN
-      - COMMIT_SHA
+      - 'SENTRY_AUTH_TOKEN=$SENTRY_AUTH_TOKEN'
+      - 'COMMIT_SHA=$COMMIT_SHA'
     args:
       - build
       - '--no-cache'
-      # pass the env vars into docker as build‑args (no =VALUE here)
       - '--build-arg'
       - SENTRY_AUTH_TOKEN
       - '--build-arg'
