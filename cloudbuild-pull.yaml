@@ -1,0 +1,40 @@
+steps:
+  - id: Build
+    name: gcr.io/cloud-builders/docker
+    # run under bash so we can refer to the secret env var
+    entrypoint: bash
+    # make the SENTRY_AUTH_TOKEN from Secret Manager available
+    secretEnv:
+      - SENTRY_AUTH_TOKEN
+    args:
+      # -c means “the rest is a shell command”
+      - -c
+      - |
+        docker build --no-cache \
+          --build-arg SENTRY_AUTH_TOKEN=$$SENTRY_AUTH_TOKEN \
+          -t $_AR_HOSTNAME/$PROJECT_ID/cloud-run-source-deploy/$REPO_NAME/$_SERVICE_NAME:$COMMIT_SHA \
+          . -f Dockerfile
+
+images:
+  - $_AR_HOSTNAME/$PROJECT_ID/cloud-run-source-deploy/$REPO_NAME/$_SERVICE_NAME:$COMMIT_SHA
+
+options:
+  substitutionOption: ALLOW_LOOSE
+  logging: CLOUD_LOGGING_ONLY
+
+substitutions:
+  _AR_HOSTNAME: us-central1-docker.pkg.dev
+  _TRIGGER_ID: ff9811e5-0a32-4124-851a-dd5875b3c26a
+  _PLATFORM: managed
+  _SERVICE_NAME: auth-hosting
+  _DEPLOY_REGION: us-central1
+
+tags:
+  - gcp-cloud-build-deploy-cloud-run
+  - gcp-cloud-build-deploy-cloud-run-managed
+  - auth-hosting
+
+availableSecrets:
+  secretManager:
+    - versionName: projects/$PROJECT_ID/secrets/sentyAuthToken/versions/latest
+      env: SENTRY_AUTH_TOKEN
