@@ -58,7 +58,7 @@ const App = () => {
 		projectId = 'P2v8HgvpS6nKJ8WcrYdOxE71rFDq'; // Testing/Staging
 	}
 
-	console.log(`ProjectID: ${  projectId}`);
+	console.log(`ProjectID: ${projectId}`);
 
 	useOidcMfa();
 
@@ -111,11 +111,11 @@ const App = () => {
 
 	let flowId = '';
 	if (window.location.host.indexOf('authentication.pieces.services') !== -1) {
-		flowId = 'sign-up-or-in-passwords-social'; // Production
+		flowId = 'sign-up-or-in'; // Production
 	} else {
-		flowId = 'sign-up-or-in-passwords-or-social'; // Testing/Staging
+		flowId = 'sign-up-or-in'; // Testing/Staging
 	}
-	console.log(`Flow ID: ${  flowId}`);
+	console.log(`Flow ID: ${flowId}`);
 
 	const debug =
 		urlParams.get('debug') === 'true' ||
