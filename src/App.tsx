@@ -210,6 +210,13 @@ const App = () => {
 						</div>
 					</td>
 				</tr>
+				<tr>
+					<td colSpan={2} align="center">
+						<a href="https://pieces.app/legal/privacy-policy">Privacy Policy</a>{' '}
+						&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{' '}
+						<a href="https://pieces.app/legal/terms">Terms &amp; Conditions</a>
+					</td>
+				</tr>
 			</table>
 		</AuthProvider>
 	);
