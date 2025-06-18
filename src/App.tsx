@@ -48,6 +48,8 @@ const App = () => {
 
 	baseUrl = 'https://api.descope.com';
 
+	console.log(window.location.host.indexOf('authentication.pieces.services'));
+
 	let projectId = '';
 	if (window.location.host.indexOf('authentication.pieces.services') !== -1) {
 		projectId = 'P2pgKajh2ElmCO6p7ioSPSpS6qev'; // Production
