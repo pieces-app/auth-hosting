@@ -7,7 +7,7 @@ import Merge from './components/Merge';
 import Confirm from './components/Confirm';
 import useOidcMfa from './hooks/useOidcMfa';
 
-const projectRegex = /^P([a-zA-Z0-9]{27}|[a-zA-Z0-9]{31})$/;
+// const projectRegex = /^P([a-zA-Z0-9]{27}|[a-zA-Z0-9]{31})$/;
 const ssoAppRegex = /^[a-zA-Z0-9\-_]{1,30}$/;
 
 const isFaviconUrlSecure = (url: string, originalFaviconUrl: string) => {
@@ -50,18 +50,11 @@ const App = () => {
 	console.log(window.location.host.indexOf('authentication.pieces.services'));
 
 	let projectId = '';
-
-	// first, take project id from env
-	const envProjectId = projectRegex.exec(
-		process.env.DESCOPE_PROJECT_ID ?? ''
-	)?.[0];
-
-	// If exists in URI use it, otherwise use env
-	const pathnameProjectId = projectRegex.exec(
-		window.location.pathname?.split('/').at(-1) || ''
-	)?.[0];
-	projectId =
-		pathnameProjectId ?? envProjectId ?? 'P2pgKajh2ElmCO6p7ioSPSpS6qev';
+	if (window.location.host.indexOf('authentication.pieces.services') !== -1) {
+		projectId = 'P2pgKajh2ElmCO6p7ioSPSpS6qev'; // Production
+	} else {
+		projectId = 'P2v8HgvpS6nKJ8WcrYdOxE71rFDq'; // Testing/Staging
+	}
 
 	useOidcMfa();
 
@@ -112,10 +105,12 @@ const App = () => {
 
 	const styleId = urlParams.get('style') || process.env.DESCOPE_STYLE_ID;
 
-	const flowId =
-		urlParams.get('flow') ||
-		process.env.DESCOPE_FLOW_ID ||
-		'sign-up-or-in-passwords-social';
+	let flowId = '';
+	if (window.location.host.indexOf('authentication.pieces.services') !== -1) {
+		flowId = 'sign-up-or-in-passwords-social'; // Production
+	} else {
+		flowId = 'sign-up-or-in-passwords-or-social'; // Testing/Staging
+	}
 
 	const debug =
 		urlParams.get('debug') === 'true' ||
