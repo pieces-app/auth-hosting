@@ -185,16 +185,32 @@ const App = () => {
 
 	return (
 		<AuthProvider projectId={projectId} baseUrl={baseUrl}>
-			<div className="app" style={{ backgroundColor }}>
-				{!done && !merge && !confirm && projectId && flowId && (
-					<div className={containerClasses} data-testid="descope-component">
-						<Descope {...flowProps} />
-					</div>
-				)}
-				{!done && merge && !confirm && <Merge />}
-				{!done && !merge && confirm && <Confirm />}
-				{done && <Done />}
-			</div>
+			<table width="100%">
+				<tr>
+					<td width="50%" align="right">
+						<img
+							src="https://storage.googleapis.com/pieces-assets/screen.png"
+							alt="Pieces Login Screen"
+							width="550"
+						/>
+					</td>
+					<td width="50%">
+						<div className="app" style={{ backgroundColor }}>
+							{!done && !merge && !confirm && projectId && flowId && (
+								<div
+									className={containerClasses}
+									data-testid="descope-component"
+								>
+									<Descope {...flowProps} />
+								</div>
+							)}
+							{!done && merge && !confirm && <Merge />}
+							{!done && !merge && confirm && <Confirm />}
+							{done && <Done />}
+						</div>
+					</td>
+				</tr>
+			</table>
 		</AuthProvider>
 	);
 };

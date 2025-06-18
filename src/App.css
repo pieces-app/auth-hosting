@@ -12,7 +12,8 @@ body,
 	display: flex;
 	flex-grow: 1;
 	height: 100%;
-	width: 100%;
+	width: 50%;
+	padding-left: 100px;
 	flex-direction: column;
 	text-align: center;
 	align-items: center;
@@ -29,7 +30,7 @@ body,
 
 .descope-base-container {
 	border-radius: 15px;
-	box-shadow: 0 1px 50px 0 rgba(178, 178, 178, 0.5);
+	/* box-shadow: 0 1px 50px 0 rgba(178, 178, 178, 0.5); */
 }
 
 .descope-login-container {
