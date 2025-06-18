@@ -47,6 +47,7 @@ const App = () => {
 		baseUrl = window.location.origin;
 
 	baseUrl = 'https://api.descope.com';
+	console.log(window.location.host.indexOf('authentication.pieces.services'));
 
 	let projectId = '';
 
