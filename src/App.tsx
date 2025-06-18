@@ -212,9 +212,21 @@ const App = () => {
 				</tr>
 				<tr>
 					<td colSpan={2} align="center">
-						<a href="https://pieces.app/legal/privacy-policy">Privacy Policy</a>{' '}
+						<a
+							href="https://pieces.app/legal/privacy-policy"
+							target="_blank"
+							rel="noreferrer"
+						>
+							Privacy Policy
+						</a>{' '}
 						&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{' '}
-						<a href="https://pieces.app/legal/terms">Terms &amp; Conditions</a>
+						<a
+							href="https://pieces.app/legal/terms"
+							target="_blank"
+							rel="noreferrer"
+						>
+							Terms &amp; Conditions
+						</a>
 					</td>
 				</tr>
 			</table>
