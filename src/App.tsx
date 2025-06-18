@@ -57,6 +57,8 @@ const App = () => {
 		projectId = 'P2v8HgvpS6nKJ8WcrYdOxE71rFDq'; // Testing/Staging
 	}
 
+	console.log(`ProjectID: ${  projectId}`);
+
 	useOidcMfa();
 
 	const urlParams = useMemo(
@@ -112,6 +114,7 @@ const App = () => {
 	} else {
 		flowId = 'sign-up-or-in-passwords-or-social'; // Testing/Staging
 	}
+	console.log(`Flow ID: ${  flowId}`);
 
 	const debug =
 		urlParams.get('debug') === 'true' ||
