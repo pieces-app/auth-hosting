@@ -1,8 +1,8 @@
 html,
 body,
 #root {
-	height: 100vh;
-	width: 100vw;
+	height: 100%;
+	width: 100%;
 	display: flex;
 	align-items: center;
 	justify-content: center;
@@ -33,14 +33,14 @@ body,
 }
 
 .descope-login-container {
-	max-width: 400px;
+	max-width: 1200px;
 }
 
 .descope-wide-container {
-	max-width: 800px;
+	max-width: 1000px;
 	width: auto;
 	overflow-y: auto;
-	max-height: 90vh;
+	/* max-height: 90vh; */
 	margin: 20px auto;
 }
 
@@ -125,7 +125,7 @@ p {
 /* Small devices (portrait tablets and large phones, 600px and up) */
 @media only screen and (min-width: 600px) {
 	.app-content {
-		width: 80%;
+		width: 100%;
 	}
 	.example {
 		min-width: fit-content;
@@ -135,7 +135,7 @@ p {
 /* Medium devices (landscape tablets, 768px and up) */
 @media only screen and (min-width: 768px) {
 	.app-content {
-		width: 55%;
+		width: 100%;
 	}
 	.example {
 		min-width: 350px;
