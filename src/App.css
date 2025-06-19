@@ -1,18 +1,26 @@
 html,
 body,
 #root {
-	height: 100vh;
-	width: 100vw;
+	height: 100%;
+	width: 100%;
 	display: flex;
 	align-items: center;
 	justify-content: center;
+}
+
+a {
+	color: black;
+	text-decoration: none;
+	font-family: 'JetBrains Mono';
+	font-weight: bold;
 }
 
 .app {
 	display: flex;
 	flex-grow: 1;
 	height: 100%;
-	width: 100%;
+	width: 50%;
+	padding-left: 100px;
 	flex-direction: column;
 	text-align: center;
 	align-items: center;
@@ -29,18 +37,18 @@ body,
 
 .descope-base-container {
 	border-radius: 15px;
-	box-shadow: 0 1px 50px 0 rgba(178, 178, 178, 0.5);
+	/* box-shadow: 0 1px 50px 0 rgba(178, 178, 178, 0.5); */
 }
 
 .descope-login-container {
-	max-width: 400px;
+	max-width: 1200px;
 }
 
 .descope-wide-container {
-	max-width: 800px;
+	max-width: 1000px;
 	width: auto;
 	overflow-y: auto;
-	max-height: 90vh;
+	/* max-height: 90vh; */
 	margin: 20px auto;
 }
 
@@ -52,7 +60,7 @@ body,
 	font-size: 48px;
 	line-height: 128%;
 	letter-spacing: 0.6px;
-	color: #0082b5;
+	color: black;
 }
 
 .example-title {
@@ -61,20 +69,6 @@ body,
 	font-style: normal;
 	font-size: 20px;
 	letter-spacing: 0.6px;
-}
-
-.example {
-	border: 2px solid;
-	min-width: 350px;
-	border-radius: 100px;
-	border-color: #0082b5;
-	padding: 16px 32px;
-	background-color: #f6fbff;
-	display: flex;
-	flex-direction: row;
-	align-items: center;
-	justify-content: center;
-	word-break: break-all;
 }
 
 .copy-icon {
@@ -125,7 +119,7 @@ p {
 /* Small devices (portrait tablets and large phones, 600px and up) */
 @media only screen and (min-width: 600px) {
 	.app-content {
-		width: 80%;
+		width: 100%;
 	}
 	.example {
 		min-width: fit-content;
@@ -135,7 +129,7 @@ p {
 /* Medium devices (landscape tablets, 768px and up) */
 @media only screen and (min-width: 768px) {
 	.app-content {
-		width: 55%;
+		width: 100%;
 	}
 	.example {
 		min-width: 350px;

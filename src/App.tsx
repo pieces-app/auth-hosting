@@ -7,7 +7,7 @@ import Merge from './components/Merge';
 import Confirm from './components/Confirm';
 import useOidcMfa from './hooks/useOidcMfa';
 
-const projectRegex = /^P([a-zA-Z0-9]{27}|[a-zA-Z0-9]{31})$/;
+// const projectRegex = /^P([a-zA-Z0-9]{27}|[a-zA-Z0-9]{31})$/;
 const ssoAppRegex = /^[a-zA-Z0-9\-_]{1,30}$/;
 
 const isFaviconUrlSecure = (url: string, originalFaviconUrl: string) => {
@@ -49,18 +49,13 @@ const App = () => {
 	baseUrl = 'https://api.descope.com';
 
 	let projectId = '';
+	if (window.location.host.indexOf('authentication.pieces.services') !== -1) {
+		projectId = 'P2pgKajh2ElmCO6p7ioSPSpS6qev'; // Production
+	} else {
+		projectId = 'P2v8HgvpS6nKJ8WcrYdOxE71rFDq'; // Testing/Staging
+	}
 
-	// first, take project id from env
-	const envProjectId = projectRegex.exec(
-		process.env.DESCOPE_PROJECT_ID ?? ''
-	)?.[0];
-
-	// If exists in URI use it, otherwise use env
-	const pathnameProjectId = projectRegex.exec(
-		window.location.pathname?.split('/').at(-1) || ''
-	)?.[0];
-	projectId =
-		pathnameProjectId ?? envProjectId ?? 'P2pgKajh2ElmCO6p7ioSPSpS6qev';
+	// console.log(`ProjectID: ${projectId}`);
 
 	useOidcMfa();
 
@@ -111,10 +106,13 @@ const App = () => {
 
 	const styleId = urlParams.get('style') || process.env.DESCOPE_STYLE_ID;
 
-	const flowId =
-		urlParams.get('flow') ||
-		process.env.DESCOPE_FLOW_ID ||
-		'sign-up-or-in-passwords-social';
+	let flowId = '';
+	if (window.location.host.indexOf('authentication.pieces.services') !== -1) {
+		flowId = 'sign-up-or-in'; // Production
+	} else {
+		flowId = 'sign-up-or-in'; // Testing/Staging
+	}
+	// console.log(`Flow ID: ${flowId}`);
 
 	const debug =
 		urlParams.get('debug') === 'true' ||
@@ -185,16 +183,51 @@ const App = () => {
 
 	return (
 		<AuthProvider projectId={projectId} baseUrl={baseUrl}>
-			<div className="app" style={{ backgroundColor }}>
-				{!done && !merge && !confirm && projectId && flowId && (
-					<div className={containerClasses} data-testid="descope-component">
-						<Descope {...flowProps} />
-					</div>
-				)}
-				{!done && merge && !confirm && <Merge />}
-				{!done && !merge && confirm && <Confirm />}
-				{done && <Done />}
-			</div>
+			<table width="100%">
+				<tr>
+					<td width="50%" align="right">
+						<img
+							src="https://storage.googleapis.com/pieces-assets/screen.png"
+							alt="Pieces Login Screen"
+							width="550"
+						/>
+					</td>
+					<td width="50%">
+						<div className="app" style={{ backgroundColor }}>
+							{!done && !merge && !confirm && projectId && flowId && (
+								<div
+									className={containerClasses}
+									data-testid="descope-component"
+								>
+									<Descope {...flowProps} />
+								</div>
+							)}
+							{!done && merge && !confirm && <Merge />}
+							{!done && !merge && confirm && <Confirm />}
+							{done && <Done />}
+						</div>
+					</td>
+				</tr>
+				<tr>
+					<td colSpan={2} align="center">
+						<a
+							href="https://pieces.app/legal/privacy-policy"
+							target="_blank"
+							rel="noreferrer"
+						>
+							Privacy Policy
+						</a>{' '}
+						&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{' '}
+						<a
+							href="https://pieces.app/legal/terms"
+							target="_blank"
+							rel="noreferrer"
+						>
+							Terms &amp; Conditions
+						</a>
+					</td>
+				</tr>
+			</table>
 		</AuthProvider>
 	);
 };
