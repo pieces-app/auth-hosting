@@ -48,8 +48,6 @@ const App = () => {
 
 	baseUrl = 'https://api.descope.com';
 
-	console.log(window.location.host.indexOf('authentication.pieces.services'));
-
 	let projectId = '';
 	if (window.location.host.indexOf('authentication.pieces.services') !== -1) {
 		projectId = 'P2pgKajh2ElmCO6p7ioSPSpS6qev'; // Production
@@ -57,7 +55,7 @@ const App = () => {
 		projectId = 'P2v8HgvpS6nKJ8WcrYdOxE71rFDq'; // Testing/Staging
 	}
 
-	console.log(`ProjectID: ${projectId}`);
+	// console.log(`ProjectID: ${projectId}`);
 
 	useOidcMfa();
 
@@ -114,7 +112,7 @@ const App = () => {
 	} else {
 		flowId = 'sign-up-or-in'; // Testing/Staging
 	}
-	console.log(`Flow ID: ${flowId}`);
+	// console.log(`Flow ID: ${flowId}`);
 
 	const debug =
 		urlParams.get('debug') === 'true' ||
