@@ -30,10 +30,49 @@ steps:
       - update
       - $_SERVICE_NAME
       - --platform=managed
+      - --project=$PROJECT_ID
+      # Configure a service-level floor of one across traffic-serving revisions.
+      - --min=1
+      # Ensure the newly created revision has no additional revision-level floor.
+      - --min-instances=default
       - --image=$_AR_HOSTNAME/$PROJECT_ID/cloud-run-source-deploy/$REPO_NAME/$_SERVICE_NAME:$COMMIT_SHA
       - --labels=managed-by=gcp-cloud-build-deploy-cloud-run,commit-sha=$COMMIT_SHA,gcb-build-id=$BUILD_ID,gcb-trigger-id=$_TRIGGER_ID
       - --region=$_DEPLOY_REGION
       - --quiet
+
+  - id: Verify minimum instance invariant
+    name: gcr.io/google.com/cloudsdktool/cloud-sdk:slim
+    entrypoint: bash
+    args:
+      - -ceu
+      - |
+        service_min="$$(gcloud run services describe $_SERVICE_NAME \
+          --project=$PROJECT_ID \
+          --region=$_DEPLOY_REGION \
+          --platform=managed \
+          --format="value(metadata.annotations.'run.googleapis.com/minScale')")"
+        traffic_revisions="$$(gcloud run services describe $_SERVICE_NAME \
+          --project=$PROJECT_ID \
+          --region=$_DEPLOY_REGION \
+          --platform=managed \
+          --format="value(status.traffic.revisionName)" | tr ';,' '  ')"
+
+        if [[ "$$service_min" != "1" || -z "$$traffic_revisions" ]]; then
+          echo "Cloud Run minimum invariant failed: service=$$service_min traffic=$$traffic_revisions" >&2
+          exit 1
+        fi
+
+        for revision in $$traffic_revisions; do
+          revision_min="$$(gcloud run revisions describe "$$revision" \
+            --project=$PROJECT_ID \
+            --region=$_DEPLOY_REGION \
+            --platform=managed \
+            --format="value(metadata.annotations.'autoscaling.knative.dev/minScale')")"
+          if [[ -n "$$revision_min" ]]; then
+            echo "Cloud Run revision minimum must be absent: revision=$$revision value=$$revision_min" >&2
+            exit 1
+          fi
+        done
 
 images:
   - $_AR_HOSTNAME/$PROJECT_ID/cloud-run-source-deploy/$REPO_NAME/$_SERVICE_NAME:$COMMIT_SHA
