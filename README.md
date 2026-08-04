@@ -8,6 +8,22 @@ This is a React web application that runs Descope's login flows according to the
 
 [![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fdescope%2Fauth-hosting&env=DESCOPE_PROJECT_ID&demo-title=Descope%20Hosted%20Auth%20Page&demo-description=https%3A%2F%2Fgithub.com%2Fdescope%2Fauth-hosting%2F%23readme&demo-url=https%3A%2F%2Fauth.descope.io%2F)
 
+#### Pieces Cloud Run minimum-instance invariant
+
+The configured service-level minimum must equal `1` in every Pieces-hosted
+environment. This is an autoscaling floor, not a cap or a guarantee that exactly
+one instance is running. `cloudbuild.yaml` enforces it with
+`gcloud run services update --min=1 --min-instances=default` on every
+deployment. The first flag owns the floor across traffic-serving revisions;
+the second ensures the newly created revision has no additional revision-level
+floor.
+
+The post-deploy step verifies the service value is `1` and every revision
+referenced by traffic or a tag has no revision-level minimum. Dormant immutable
+revisions created before this invariant may retain their historical annotation;
+they must remain untagged and receive no traffic. Changing a trigger, service,
+or deployment path must retain this assertion.
+
 By default, the app is deployed to the Descope hosting page in [https://auth.descope.io](https://auth.descope.io).  
 The main purpose is to allow easy integration for descopers implementing authentication with Descope (such as OIDC [use case](#open-id-connect-oidc-use-cases-in-descope)).
 
